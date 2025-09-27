@@ -1,0 +1,22 @@
+{
+    "nav": {
+        "home": "الرئيسية",
+        "about": "من نحن",
+        "services": "الخدمات",
+        "blog": "المدونة",
+        "team": "فريقنا",
+        "contact": "اتصل بنا",
+        "book": "احجز موعدًا",
+        "allServices": "جميع الخدمات",
+        "search": "بحث"
+    },
+    "sections": {
+        "teamTitle": "فريقنا",
+        "clientsTitle": "آراء عملائنا"
+    },
+    "buttons": {
+        "readMore": "اقرأ المزيد",
+        "learnMore": "اعرف المزيد",
+        "discover": "اكتشف"
+    }
+}

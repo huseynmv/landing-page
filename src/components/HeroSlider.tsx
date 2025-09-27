@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const BASE = process.env.NEXT_PUBLIC_CMS ?? "https://romantic-victory-de00aedaff.strapiapp.com";
@@ -15,6 +16,8 @@ type Slide = {
 };
 
 export default function HeroSlider() {
+    const { locale } = useParams() as { locale: "en" | "ar" };
+
     const [slides, setSlides] = useState<Slide[]>([]);
     const [current, setCurrent] = useState(0);
     const [isAuto, setIsAuto] = useState(true);
@@ -120,7 +123,7 @@ export default function HeroSlider() {
                                 {slide.description && (
                                     <p
                                         key={`desc-${current}`}
-                                        className="text-lg md:text-xl text-white/90 leading-relaxed pr-[64px]"
+                                        className="text-lg md:text-xl text-white/90 leading-relaxed pe-[64px]"
                                     >
                                         {slide.description}
                                     </p>
@@ -137,7 +140,7 @@ export default function HeroSlider() {
                                 </Link>
                             </div>
                         </div>
-                        <div className="relative" style={{ marginRight: "64px" }}>
+                        <div className="relative me-[64px]">
                             <div className="relative w-80 h-80 lg:w-96 lg:h-96 bg-[#643F2E]">
                                 <div className="relative w-full h-full overflow-hidden">
                                     <Image
@@ -159,7 +162,7 @@ export default function HeroSlider() {
                     <button
                         key={i}
                         onClick={() => goTo(i)}
-                        className={`w-3 h-3 rounded-full transition-all duration-300 ${current === i ? "bg-white scale-125" : "bg-white/50 hover:bg-white/75"
+                        className={`w-3 h-3 rounded-full transition-all duration-300  ${current === i ? "bg-white scale-125" : "bg-white/50 hover:bg-white/75"
                             }`}
                         aria-label={`Go to slide ${i + 1}`}
                     />

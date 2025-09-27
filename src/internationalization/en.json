@@ -1,0 +1,22 @@
+{
+    "nav": {
+        "home": "Home",
+        "about": "About us",
+        "services": "Services",
+        "blog": "Blog",
+        "team": "Our Team",
+        "contact": "Contact us",
+        "book": "Book Appointment",
+        "allServices": "All Services",
+        "search": "Search"
+    },
+    "sections": {
+        "teamTitle": "Our Team",
+        "clientsTitle": "What our clients are saying"
+    },
+    "buttons": {
+        "readMore": "Read More",
+        "learnMore": "Learn More",
+        "discover": "Discover"
+    }
+}
