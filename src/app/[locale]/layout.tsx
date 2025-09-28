@@ -1,9 +1,10 @@
 import Navbar from "@/components/Navbar";
 import "../globals.css";
 import ReduxProvider from "@/store/ReduxProvider";
-import { setLocale, setDict, type Locale } from "@/store/localeSlice";
+import { type Locale } from "@/store/localeSlice";
 import Footer from "@/components/Footer";
 import { DM_Sans } from "next/font/google";
+
 const dmSans = DM_Sans({
     subsets: ["latin"],
     display: "swap",
@@ -27,18 +28,21 @@ export default async function RootLayout({
     params,
 }: {
     children: React.ReactNode;
-    params: Promise<{ locale: Locale }>;
+    params: Promise<{ locale: string }>;
 }) {
     const { locale } = await params;
-    const dict = await loadDict(locale);
-    const dir = locale === "ar" ? "rtl" : "ltr";
+
+    const validLocale: Locale = locale === "ar" ? "ar" : "en";
+
+    const dict = await loadDict(validLocale);
+    const dir = validLocale === "ar" ? "rtl" : "ltr";
 
     const initialState = {
-        locale: { locale, dict },
+        locale: { locale: validLocale, dict },
     };
 
     return (
-        <html lang={locale} dir={dir}>
+        <html lang={validLocale} dir={dir}>
             <head>
                 <link
                     rel="stylesheet"

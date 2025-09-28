@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, Suspense } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import heroImg from "@/assets/heroImg.jpg";
@@ -12,7 +12,6 @@ type TeamItem = { id: number; name: string; position?: string | null };
 const CMS = process.env.NEXT_PUBLIC_CMS
 type TabKey = "team" | "services";
 const PAGE_SIZE = 8;
-
 
 type PageToken = number | "…";
 
@@ -49,20 +48,16 @@ function Pagination({
 
     return (
         <nav className="mt-8 flex items-center justify-end gap-4 select-none">
-            {/* Prev */}
             <button
                 onClick={() => current > 1 && onPage(current - 1)}
                 className={`p-2 text-[#2e2e2e] disabled:opacity-40 ${current === 1 ? "cursor-not-allowed" : "hover:opacity-70"}`}
                 disabled={current === 1}
                 aria-label="Prev"
             >
-
                 <svg className={isRTL ? "" : "rotate-180"} width="22" height="22" viewBox="0 0 24 24" fill="none">
                     <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
             </button>
-
-            {/* pages */}
             <ul className="flex items-center gap-6">
                 {items.map((it, i) =>
                     it === "…" ? (
@@ -87,7 +82,6 @@ function Pagination({
                 )}
             </ul>
 
-            {/* Next */}
             <button
                 onClick={() => current < total && onPage(current + 1)}
                 className={`p-2 text-[#2e2e2e] disabled:opacity-40 ${current === total ? "cursor-not-allowed" : "hover:opacity-70"}`}
@@ -102,7 +96,7 @@ function Pagination({
     );
 }
 
-export default function SearchPage() {
+function SearchContent() {
     const { locale } = useParams() as { locale: "en" | "ar" };
     const router = useRouter();
     const sp = useSearchParams();
@@ -260,11 +254,10 @@ export default function SearchPage() {
                         </aside>
 
                         <section className="col-span-12 md:col-span-8 lg:col-span-9">
-
                             <button
                                 onClick={() => router.back()}
                                 aria-label="Previous testimonial"
-                                className={`w-10  ${locale === 'ar' ? "rtl-flip" : ""} inline-flex items-center gap-2 text-[#4B2615] hover:opacity-90 text-sm md:text-base w-fit`}
+                                className={`w-10 ${locale === 'ar' ? "rtl-flip" : ""} inline-flex items-center gap-2 text-[#4B2615] hover:opacity-90 text-sm md:text-base w-fit`}
                             >
                                 <ChevronLeft className="text-black rtl-flip" />
                                 {L.back}
@@ -273,7 +266,6 @@ export default function SearchPage() {
                                 <p className="text-black/60 text-sm md:text-base">Loading…</p>
                             ) : active === "team" ? (
                                 <>
-
                                     <ResultList
                                         locale={locale}
                                         items={team.map((t) => ({
@@ -321,6 +313,30 @@ export default function SearchPage() {
     );
 }
 
+function SearchFallback() {
+    return (
+        <main className="min-h-screen bg-white text-[#2E2E2E]">
+            <section className="relative h-[60vh] md:h-[70vh] lg:h-screen overflow-hidden">
+                <Image src={heroImg} alt="" fill priority className="object-cover saturate-0" />
+                <div className="absolute inset-0 bg-[linear-gradient(271.47deg,rgba(75,38,21,0.28)_1.2%,rgba(75,38,21,0.68)_86.38%)]" />
+            </section>
+            <div className="pt-10 md:pt-16 pb-16 px-6 md:px-10 lg:px-[115px]">
+                <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4B2A1C]"></div>
+                </div>
+            </div>
+        </main>
+    );
+}
+
+export default function SearchPage() {
+    return (
+        <Suspense fallback={<SearchFallback />}>
+            <SearchContent />
+        </Suspense>
+    );
+}
+
 function ResultList({
     locale,
     items,
@@ -350,6 +366,7 @@ function ResultList({
         </ul>
     );
 }
+
 function ChevronLeft(props: React.SVGProps<SVGSVGElement>) {
     return (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" {...props}>
