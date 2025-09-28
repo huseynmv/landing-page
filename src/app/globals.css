@@ -1,2 +1,5 @@
 @import "tailwindcss";
 [dir="rtl"] .rtl-flip { transform: scaleX(-1); }
+html, body{
+    font-family: "DM Sans"
+}

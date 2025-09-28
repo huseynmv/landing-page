@@ -18,5 +18,29 @@
         "readMore": "Read More",
         "learnMore": "Learn More",
         "discover": "Discover"
+    },
+    "lorem": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    "footer": {
+        "contacts": "Contacts",
+        "subscribeCta": "Subscribe",
+        "emailPlaceholder": "Email",
+        "emailRequired": "Required",
+        "emailInvalid": "Invalid email",
+        "subscribedOk": "Subscribed successfully",
+        "already": "You’re already subscribed",
+        "failed": "Couldn’t save your subscription",
+        "links": {
+            "about": "About",
+            "strategy": "Our Strategy",
+            "advantages": "Our Advantages",
+            "socialResponsibility": "Social Responsibility",
+            "services": "Our Services"
+        },
+        "social": {
+            "twitter": "Twitter",
+            "facebook": "Facebook",
+            "google": "Google"
+        },
+        "copyright": "All rights reserved."
     }
 }

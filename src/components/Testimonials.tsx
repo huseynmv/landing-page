@@ -2,69 +2,21 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
-
-type Testimonial = {
-    id: number;
-    title: string | null;
-    subTitle: string | null;
-    description: string | null;
-    name: string | null;
-    position: string | null;
-    imageUrl: string | null;
-    imageAlt: string | null;
-};
-
-const CMS =
-    process.env.NEXT_PUBLIC_CMS ?? "https://romantic-victory-de00aedaff.strapiapp.com";
+import { useAppSelector } from "@/store";
+import { fetchTestimonials } from "@/lib/services";
+import type { Testimonial } from "@/types/testimonial";
 
 export default function Testimonials() {
-    const { locale } = useParams() as { locale: "en" | "ar" };
+    const { locale, dict } = useAppSelector((s) => s.locale);
+    const isRTL = locale === "ar";
     const [items, setItems] = useState<Testimonial[]>([]);
     const [i, setI] = useState(0);
 
     useEffect(() => {
-        async function load(localeToUse: "en" | "ar") {
-            const url =
-                `${CMS}/api/testimonials` +
-                `?fields[0]=title&fields[1]=subTitle&fields[2]=description&fields[3]=name&fields[4]=position` +
-                `&populate[image][fields][0]=url&populate[image][fields][1]=alternativeText` +
-                `&sort=createdAt:desc` +
-                `&locale=${localeToUse}`;
-
-            const res = await fetch(url, { cache: "no-store" });
-            const json = await res.json();
-            const list: Testimonial[] =
-                json?.data?.map((d: any) => {
-                    const img =
-                        d?.image?.url ??
-                        d?.attributes?.image?.data?.attributes?.url ??
-                        d?.attributes?.image?.url ??
-                        null;
-                    const alt =
-                        d?.image?.alternativeText ??
-                        d?.attributes?.image?.data?.attributes?.alternativeText ??
-                        null;
-
-                    return {
-                        id: d.id,
-                        title: d.title ?? d.attributes?.title ?? null,
-                        subTitle: d.subTitle ?? d.attributes?.subTitle ?? null,
-                        description: d.description ?? d.attributes?.description ?? null,
-                        name: d.name ?? d.attributes?.name ?? null,
-                        position: d.position ?? d.attributes?.position ?? null,
-                        imageUrl: img ? (img.startsWith("http") ? img : `${CMS}${img}`) : null,
-                        imageAlt: alt ?? null,
-                    };
-                }) ?? [];
-
-            return list;
-        }
-
         (async () => {
-            let list = await load(locale);
+            let list = await fetchTestimonials(locale);
             if (!list.length && locale === "ar") {
-                list = await load("en");
+                list = await fetchTestimonials("en");
             }
             setItems(list);
             setI(0);
@@ -82,19 +34,21 @@ export default function Testimonials() {
     const t = items[i];
 
     return (
-        <section className="bg-[#4B2615] text-white pt-[100px] pb-[80px] px-[122px]">
+        <section className="bg-[#4B2615] text-white pt-[70px] pb-[60px] px-6 sm:px-8 lg:pt-[100px] lg:pb-[80px] lg:px-[122px]">
             <div className="max-w-5xl">
-                <h2 className="text-3xl md:text-4xl font-semibold">
+                <h2 className="text-white text-[28px] sm:text-[34px] lg:text-[40px] font-[700]">
                     {t.title ?? (locale === "ar" ? "آراء عملائنا" : "What our clients are saying")}
                 </h2>
                 {t.subTitle && (
-                    <p className="mt-4 text-white/85 leading-relaxed">{t.subTitle}</p>
+                    <p className="mt-3 sm:mt-4 text-white/70 text-[16px] sm:text-[17px] lg:text-[18px] font-[400] leading-relaxed">
+                        {t.subTitle}
+                    </p>
                 )}
             </div>
 
-            <div className="relative mt-10">
-                <div className="grid grid-cols-1 lg:grid-cols-[374px_minmax(0,1fr)] gap-y-8 lg:gap-y-0 lg:gap-x-[49px] items-start">
-                    <div className="w-[374px] h-[374px] bg-[#6A4433] overflow-hidden">
+            <div className="relative mt-8 lg:mt-10">
+                <div className="grid grid-cols-1 lg:grid-cols-[374px_minmax(0,1fr)] gap-y-6 sm:gap-y-8 lg:gap-y-0 lg:gap-x-[49px] items-start">
+                    <div className="mx-auto lg:mx-0 w-[220px] h-[220px] sm:w-[300px] sm:h-[300px] lg:w-[374px] lg:h-[374px] bg-[#6A4433] overflow-hidden">
                         {t.imageUrl && (
                             <Image
                                 src={t.imageUrl}
@@ -106,43 +60,70 @@ export default function Testimonials() {
                             />
                         )}
                     </div>
-
                     <div className="max-w-[640px] flex flex-col h-full justify-between">
                         {t.description && (
-                            <p className="text-lg md:text-[20px] leading-8 text-white/90 whitespace-pre-line">
+                            <p className="text-[18px] sm:text-[20px] lg:text-[24px] font-[400] leading-8 text-white/70 whitespace-pre-line">
                                 {t.description}
                             </p>
                         )}
 
-                        <div className="mt-8">
-                            {t.name && <div className="font-semibold text-lg">{t.name}</div>}
+                        <div className="mt-6 lg:mt-8">
+                            {t.name && <div className="text-[18px] sm:text-[20px] lg:text-[24px] font-[600]">{t.name}</div>}
                             {t.position && (
-                                <div className="text-white/70 text-sm">{t.position}</div>
+                                <div className="text-white/70 text-[14px] sm:text-[15px] lg:text-[16px] font-[400]">
+                                    {t.position}
+                                </div>
                             )}
                         </div>
                     </div>
                 </div>
+                <div className="mt-[18px] sm:mt-[20px] lg:mt-[22px] flex justify-center lg:justify-end gap-3 sm:gap-4">
+                    {
+                        isRTL ? <>
+                            <button
+                                onClick={next}
+                                disabled={!canNext}
+                                aria-label="Next testimonial"
+                                className={`w-10  ${isRTL ? "rtl-flip" : ""} h-10 sm:w-11 sm:h-11 rounded-full grid place-items-center transition ${canNext ? "bg-white hover:bg-white/90" : "bg-white/80 opacity-60 cursor-not-allowed"
+                                    }`}
+                            >
+                                <ChevronRight className="text-[#4B2A1C] rtl-flip" />
+                            </button>
+                            <button
+                                onClick={prev}
+                                disabled={!canPrev}
+                                aria-label="Previous testimonial"
+                                className={`w-10  ${isRTL ? "rtl-flip" : ""} h-10 sm:w-11 sm:h-11 rounded-full grid place-items-center transition ${canPrev ? "bg-white/15 hover:bg-white/25" : "bg-white/10 opacity-60 cursor-not-allowed"
+                                    }`}
+                            >
+                                <ChevronLeft className="text-white rtl-flip" />
+                            </button>
 
-                <div className="mt-[22px] flex justify-end gap-4">
-                    <button
-                        onClick={prev}
-                        disabled={!canPrev}
-                        aria-label="Previous testimonial"
-                        className={`w-11 h-11 rounded-full grid place-items-center transition ${canPrev ? "bg-white/15 hover:bg-white/25" : "bg-white/10 opacity-60 cursor-not-allowed"
-                            }`}
-                    >
-                        <ChevronLeft className="text-white rtl-flip" />
-                    </button>
 
-                    <button
-                        onClick={next}
-                        disabled={!canNext}
-                        aria-label="Next testimonial"
-                        className={`w-11 h-11 rounded-full grid place-items-center transition ${canNext ? "bg-white hover:bg-white/90" : "bg-white/80 opacity-60 cursor-not-allowed"
-                            }`}
-                    >
-                        <ChevronRight className="text-[#4B2A1C] rtl-flip" />
-                    </button>
+                        </> : <>
+                            <button
+                                onClick={prev}
+                                disabled={!canPrev}
+                                aria-label="Previous testimonial"
+                                className={`w-10  ${isRTL ? "rtl-flip" : ""} h-10 sm:w-11 sm:h-11 rounded-full grid place-items-center transition ${canPrev ? "bg-white/15 hover:bg-white/25" : "bg-white/10 opacity-60 cursor-not-allowed"
+                                    }`}
+                            >
+                                <ChevronLeft className="text-white rtl-flip" />
+                            </button>
+                            <button
+                                onClick={next}
+                                disabled={!canNext}
+                                aria-label="Next testimonial"
+                                className={`w-10  ${isRTL ? "rtl-flip" : ""} h-10 sm:w-11 sm:h-11 rounded-full grid place-items-center transition ${canNext ? "bg-white hover:bg-white/90" : "bg-white/80 opacity-60 cursor-not-allowed"
+                                    }`}
+                            >
+                                <ChevronRight className="text-[#4B2A1C] rtl-flip" />
+                            </button>
+
+
+
+                        </>
+                    }
                 </div>
             </div>
         </section>

@@ -21,14 +21,14 @@ export default function LocaleSwitch() {
         <div className="flex items-center gap-3">
             <button
                 onClick={() => switchTo("en")}
-                className={locale === "en" ? "underline" : "opacity-70 hover:opacity-100"}
+                className={locale === "en" ? "underline text-white" : "opacity-70 hover:opacity-100 text-white"}
             >
                 EN
             </button>
-            <span className="opacity-50">/</span>
+            <span className="opacity-50 text-white">/</span>
             <button
                 onClick={() => switchTo("ar")}
-                className={locale === "ar" ? "underline" : "opacity-70 hover:opacity-100"}
+                className={locale === "ar" ? "underline text-white" : "opacity-70 hover:opacity-100 text-white"}
             >
                 AR
             </button>

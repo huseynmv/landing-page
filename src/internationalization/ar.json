@@ -18,5 +18,29 @@
         "readMore": "اقرأ المزيد",
         "learnMore": "اعرف المزيد",
         "discover": "اكتشف"
+    },
+    "lorem": "نص تجريبي يستخدم في الطباعة والتنضيد منذ القرن السادس عشر.",
+    "footer": {
+        "contacts": "تواصل",
+        "subscribeCta": "اشترك",
+        "emailPlaceholder": "البريد الإلكتروني",
+        "emailRequired": "مطلوب",
+        "emailInvalid": "بريد إلكتروني غير صالح",
+        "subscribedOk": "تم الاشتراك بنجاح",
+        "already": "أنت مشترك بالفعل",
+        "failed": "تعذر حفظ الاشتراك",
+        "links": {
+            "about": "من نحن",
+            "strategy": "استراتيجيتنا",
+            "advantages": "مميزاتنا",
+            "socialResponsibility": "المسؤولية الاجتماعية",
+            "services": "خدماتنا"
+        },
+        "social": {
+            "twitter": "تويتر",
+            "facebook": "فيسبوك",
+            "google": "جوجل"
+        },
+        "copyright": "جميع الحقوق محفوظة."
     }
 }

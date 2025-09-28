@@ -1,53 +1,21 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
-const BASE = process.env.NEXT_PUBLIC_CMS ?? "https://romantic-victory-de00aedaff.strapiapp.com";
-
-type Slide = {
-    id: number;
-    title: string;
-    description: string | null;
-    readMore: string | null;
-    imageUrl: string;
-    alt?: string | null;
-};
+import { useAppSelector } from "@/store";
+import { fetchSliders } from "@/lib/services";
+import type { Slide } from "@/types/slider";
 
 export default function HeroSlider() {
-    const { locale } = useParams() as { locale: "en" | "ar" };
-
+    const { locale } = useAppSelector((s) => s.locale);
     const [slides, setSlides] = useState<Slide[]>([]);
     const [current, setCurrent] = useState(0);
     const [isAuto, setIsAuto] = useState(true);
 
     useEffect(() => {
-        const url =
-            `${BASE}/api/sliders` +
-            `?fields[0]=title&fields[1]=description&fields[2]=readMore` +
-            `&populate[image][fields][0]=url&populate[image][fields][1]=alternativeText` +
-            `&sort=createdAt:desc`;
-
         (async () => {
             try {
-                const res = await fetch(url, { cache: "no-store" });
-                const json = await res.json();
-                const list: Slide[] =
-                    json?.data?.map((d: any) => ({
-                        id: d.id,
-                        title: d.title ?? d.attributes?.title,
-                        description: d.description ?? d.attributes?.description ?? null,
-                        readMore: d.readMore ?? d.attributes?.readMore ?? null,
-                        imageUrl:
-                            d.image?.url ??
-                            d.attributes?.image?.data?.attributes?.url ??
-                            "",
-                        alt:
-                            d.image?.alternativeText ??
-                            d.attributes?.image?.data?.attributes?.alternativeText ??
-                            null,
-                    })) ?? [];
+                const list = await fetchSliders(locale);
                 setSlides(list);
             } catch (e) {
                 console.error("Failed to load sliders", e);
@@ -78,42 +46,44 @@ export default function HeroSlider() {
     if (slides.length === 0) return null;
 
     const slide = slides[current];
-    const portraitSrc = slide.imageUrl.startsWith("http")
-        ? slide.imageUrl
-        : `${BASE}${slide.imageUrl}`;
+    const portraitSrc = slide.imageUrl;
 
     return (
         <>
             <div className="relative z-20 h-full flex items-center">
                 <div className="w-full">
-                    <div className="flex items-center justify-center">
+                    <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-0 px-6 sm:px-8 lg:px-0">
                         <div className="hidden lg:flex w-[140px] shrink-0 flex-col justify-center items-center gap-4 self-stretch py-4">
                             <button
                                 onClick={prev}
-                                className="grid place-items-center w-8 h-8 rounded-full ring-1 ring-white/70 text-white hover:bg-white/10 transition-colors"
+                                className="grid place-items-center w-8 h-8 "
                                 aria-label="Previous slide"
                             >
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                    <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
+                                <img src="fa-angle-left.svg" />
                             </button>
                             <div className="flex flex-col items-center gap-3">
                                 {slides.map((_, i) => (
                                     <button
                                         key={i}
                                         onClick={() => goTo(i)}
-                                        className={`w-3 h-3 rounded-full transition-all duration-300 ${current === i ? "bg-white scale-125" : "bg-white/50 hover:bg-white/75"
+                                        className={`w-3 h-3 rounded-full transition-all duration-300 ${current === i
+                                            ? "bg-white scale-125"
+                                            : "bg-white/50 hover:bg-white/75"
                                             }`}
                                         aria-label={`Go to slide ${i + 1}`}
                                     />
                                 ))}
                             </div>
                         </div>
-                        <div className="text-white space-y-6 flex-1">
+
+                        <div
+                            className={`text-white space-y-6 flex-1 text-center lg:text-left ${locale === "ar" ? "md:ml-[64px] lg:ml-[64px]" : ""
+                                }`}
+                        >
                             <div className="overflow-hidden">
                                 <h1
                                     key={`title-${current}`}
-                                    className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
+                                    className="text-[28px] sm:text-[34px] lg:text-[40px] font-[700]"
                                 >
                                     {slide.title}
                                 </h1>
@@ -123,7 +93,7 @@ export default function HeroSlider() {
                                 {slide.description && (
                                     <p
                                         key={`desc-${current}`}
-                                        className="text-lg md:text-xl text-white/90 leading-relaxed pe-[64px]"
+                                        className="text-[16px] sm:text-[18px] font-[500] pe-0 lg:pe-[64px]"
                                     >
                                         {slide.description}
                                     </p>
@@ -134,14 +104,20 @@ export default function HeroSlider() {
                                 <Link
                                     href={slide.readMore ?? "#"}
                                     key={`button-${current}`}
-                                    className="inline-block bg-white text-gray-900 px-8 py-3 rounded-full font-semibold hover:bg-white/90 transition-colors"
+                                    className="inline-block bg-white text-[16px] sm:text-[18px] text-[#4B2615] font-[500] px-6 sm:px-8 py-2.5 sm:py-3 rounded-[12px] hover:bg-white/90 transition-colors"
                                 >
-                                    Read More
+                                    {locale === 'ar' ? "اقرأ المزيد" : "Read More"}
                                 </Link>
                             </div>
                         </div>
-                        <div className="relative me-[64px]">
-                            <div className="relative w-80 h-80 lg:w-96 lg:h-96 bg-[#643F2E]">
+
+                        <div
+                            className={`relative order-first lg:order-none ${locale === "ar"
+                                ? "md:ml-[64px] lg:ml-[64px]"
+                                : "md:mr-[64px] lg:mr-[64px]"
+                                }`}
+                        >
+                            <div className="relative w-64 h-64 sm:w-72 sm:h-72 lg:w-96 lg:h-96 bg-[#643F2E]">
                                 <div className="relative w-full h-full overflow-hidden">
                                     <Image
                                         src={portraitSrc}
@@ -149,7 +125,7 @@ export default function HeroSlider() {
                                         fill
                                         className="object-cover"
                                         key={`portrait-${current}`}
-                                        sizes="(max-width: 1024px) 20rem, 24rem"
+                                        sizes="(max-width: 640px) 16rem, (max-width: 1024px) 18rem, 24rem"
                                     />
                                 </div>
                             </div>
@@ -162,7 +138,9 @@ export default function HeroSlider() {
                     <button
                         key={i}
                         onClick={() => goTo(i)}
-                        className={`w-3 h-3 rounded-full transition-all duration-300  ${current === i ? "bg-white scale-125" : "bg-white/50 hover:bg-white/75"
+                        className={`w-3 h-3 rounded-full transition-all duration-300  ${current === i
+                            ? "bg-white scale-125"
+                            : "bg-white/50 hover:bg-white/75"
                             }`}
                         aria-label={`Go to slide ${i + 1}`}
                     />
@@ -170,38 +148,4 @@ export default function HeroSlider() {
             </div>
         </>
     );
-    //       {/* <style jsx>{`
-    //         @keyframes slide-in-left {
-    //           from {
-    //             opacity: 0;
-    //             transform: translateX(-30px);
-    //           }
-    //           to {
-    //             opacity: 1;
-    //             transform: translateX(0);
-    //           }
-    //         }
-
-    //         @keyframes fade-in {
-    //           from {
-    //             opacity: 0;
-    //             transform: scale(0.95);
-    //           }
-    //           to {
-    //             opacity: 1;
-    //             transform: scale(1);
-    //           }
-    //         }
-
-    //         .animate-slide-in-left {
-    //           animation: slide-in-left 0.8s ease-out;
-    //         }
-
-    //         .animate-fade-in {
-    //           animation: fade-in 0.8s ease-out;
-    //         }
-    //       `}</style> */}
-    //     </section>
-    //   );
-    // }
 }

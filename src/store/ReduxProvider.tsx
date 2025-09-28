@@ -1,34 +1,15 @@
 "use client";
-
-import { PropsWithChildren, useMemo, useEffect } from "react";
+import { useMemo } from "react";
 import { Provider } from "react-redux";
-import { makeStore } from ".";
-import { setLocale, Locale } from "./localeSlice";
+import { makeStore, type RootState } from ".";
 
 export default function ReduxProvider({
     children,
-    initialLocale = "en",
-}: PropsWithChildren<{ initialLocale?: Locale }>) {
-    const store = useMemo(
-        () => makeStore({ locale: { locale: initialLocale } }),
-        [initialLocale]
-    );
-    useEffect(() => {
-        const unsub = store.subscribe(() => {
-            try {
-                const l = store.getState().locale.locale;
-                localStorage.setItem("locale", l);
-            } catch { }
-        });
-        return unsub;
-    }, [store]);
-
-    useEffect(() => {
-        try {
-            const saved = localStorage.getItem("locale") as Locale | null;
-            if (saved) store.dispatch(setLocale(saved));
-        } catch { }
-    }, [store]);
-
+    initialState,
+}: {
+    children: React.ReactNode;
+    initialState?: Partial<RootState>;
+}) {
+    const store = useMemo(() => makeStore(initialState as any), [initialState]);
     return <Provider store={store}>{children}</Provider>;
 }

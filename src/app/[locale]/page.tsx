@@ -12,7 +12,7 @@ export default async function HomePage({
 
   return (
     <>
-      <section className="-mt-16 relative h-screen overflow-hidden">
+      <section className="relative h-screen overflow-hidden">
         <Image
           src={heroImg}
           alt="Background"
