@@ -85,13 +85,13 @@ export default async function ServiceDetailPage({ params }: { params: Promise<Pa
                 <div className="absolute inset-0 bg-[linear-gradient(271.47deg,rgba(75,38,21,0.28)_1.2%,rgba(75,38,21,0.68)_86.38%)]" />
             </section>
             <div className="relative z-10 h-full px-6 flex items-start">
-                <div className="max-w-5xl w-full mx-auto pt-8 px-6">
+                <div className={`max-w-5xl w-full mx-auto pt-8 px-6 ${locale === 'ar' ? 'flex justify-end' : ""}`}>
                     <BackButton
                         ariaLabel="Previous page"
                         className={`w-10 ${locale === "ar" ? "rtl-flip" : ""} inline-flex items-center gap-2 text-[#4B2615] hover:opacity-90 text-sm md:text-base w-fit`}
                     >
                         <ChevronLeft className="text-black rtl-flip" />
-                        Back
+                        {locale === "en" ? "Back" : "خلف"}
                     </BackButton>
                 </div>
             </div>
@@ -132,7 +132,8 @@ export default async function ServiceDetailPage({ params }: { params: Promise<Pa
                                         </div>
                                     )}
 
-                                    <div className="mt-2 pl-4 border-l-2 border-neutral-200">
+                                    <div className={`mt-2 border-neutral-200 ${locale === 'ar' ? "pr-4 border-r-2" : "pl-4 border-l-2"
+                                        }`}>
                                         <div className="flex items-start gap-2">
                                             <span className="mt-[6px] inline-block w-2 h-2 bg-[#5A3A2B] rounded-sm" />
                                             <div>

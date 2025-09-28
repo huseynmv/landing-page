@@ -189,7 +189,7 @@ export default function Navbar() {
                                 aria-label={dict?.nav.search}
                                 className="grid place-items-center w-8 h-8 border-none  ring-white/40 hover:ring-white transition"
                             >
-                                <img src="fa-search.svg" />
+                                <img src="/icons/fa-search.svg" />
                             </button>
                         </form>
 

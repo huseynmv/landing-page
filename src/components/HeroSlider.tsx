@@ -59,7 +59,7 @@ export default function HeroSlider() {
                                 className="grid place-items-center w-8 h-8 "
                                 aria-label="Previous slide"
                             >
-                                <img src="fa-angle-left.svg" />
+                                <img src="/icons/fa-angle-left.svg" />
                             </button>
                             <div className="flex flex-col items-center gap-3">
                                 {slides.map((_, i) => (

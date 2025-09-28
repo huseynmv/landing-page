@@ -86,13 +86,13 @@ export default function Footer() {
                         <span className="text-white/90 text-[16px] font-[400]">{dict?.footer.contacts}</span>
                         <div className="flex items-center gap-5 sm:gap-[29px]">
                             <a href="#" aria-label={dict?.footer.social.twitter} className="hover:opacity-80">
-                                <img src="fa-twitter.svg" alt="Twitter" />
+                                <img src="/icons/fa-twitter.svg" alt="Twitter" />
                             </a>
                             <a href="#" aria-label={dict?.footer.social.facebook} className="hover:opacity-80">
-                                <img src="fa-facebook-square.svg" alt="Facebook" />
+                                <img src="/icons/fa-facebook-square.svg" alt="Facebook" />
                             </a>
                             <a href="#" aria-label={dict?.footer.social.google} className="hover:opacity-80">
-                                <img src="fa-google-plus.svg" alt="Google Plus" />
+                                <img src="/icons/fa-google-plus.svg" alt="Google Plus" />
                             </a>
                         </div>
                     </div>

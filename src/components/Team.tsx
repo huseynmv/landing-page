@@ -67,10 +67,10 @@ export default function Team() {
                 <button
                     onClick={prev}
                     aria-label="Previous"
-                    className={`absolute ${isRTL ? "rtl-flip" : ""} left-2 sm:left-0 top-1/2 -translate-y-1/2 grid place-items-center w-9 h-9 rounded-full transition ${canPrev ? "hover:bg-black/5" : "opacity-40 pointer-events-none"
+                    className={`absolute ${isRTL ? "rtl-flip" : ""} left-2 z-99 sm:left-0 top-1/2 -translate-y-1/2 grid place-items-center w-9 h-9 rounded-full transition ${canPrev ? "hover:bg-black/5" : "opacity-40 pointer-events-none"
                         }`}
                 >
-                    <img className="rtl-flip" src="left-dark.svg" />
+                    <img className="rtl-flip" src="/icons/left-dark.svg" />
                 </button>
                 <div className="mx-2 sm:mx-8 md:mx-12 lg:mx-[138px] overflow-hidden">
                     <div
@@ -112,11 +112,11 @@ export default function Team() {
                                                     aria-label="WhatsApp"
                                                     className="hover:opacity-70"
                                                 >
-                                                    <img src="fa-whatsapp.svg" />
+                                                    <img src="/icons/fa-whatsapp.svg" />
                                                 </Link>
                                             ) : (
                                                 <span className="opacity-40">
-                                                    <img src="fa-whatsapp.svg" />
+                                                    <img src="/icons/fa-whatsapp.svg" />
                                                 </span>
                                             )}
 
@@ -126,11 +126,11 @@ export default function Team() {
                                                     aria-label="Call"
                                                     className="hover:opacity-70"
                                                 >
-                                                    <img src="fa-phone.svg" />
+                                                    <img src="/icons/fa-phone.svg" />
                                                 </Link>
                                             ) : (
                                                 <span className="opacity-40">
-                                                    <img src="fa-phone.svg" />
+                                                    <img src="/icons/fa-phone.svg" />
                                                 </span>
                                             )}
 
@@ -140,10 +140,10 @@ export default function Team() {
                                                     aria-label="Email"
                                                     className="hover:opacity-70"
                                                 >
-                                                    <img src="fa-mail.svg" />
+                                                    <img src="/icons/fa-mail.svg" />
                                                 </Link>
                                             ) : (
-                                                <img src="fa-mail.svg" />
+                                                <img src="/icons/fa-mail.svg" />
                                             )}
                                         </div>
                                     </article>
@@ -158,7 +158,7 @@ export default function Team() {
                     className={`absolute ${isRTL ? "rtl-flip" : ""} right-2 sm:right-0 top-1/2 -translate-y-1/2 grid place-items-center w-9 h-9 rounded-full transition ${canNext ? "hover:bg-black/5" : "opacity-40 pointer-events-none"
                         }`}
                 >
-                    <img src="right-dark.svg" className="rtl-flip" />
+                    <img src="/icons/right-dark.svg" className="rtl-flip" />
                 </button>
             </div>
         </section>
